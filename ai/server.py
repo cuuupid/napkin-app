@@ -27,5 +27,13 @@ def predict_many():
         console.error(e)
         return e, 500
 
+@app.route('/log')
+def log():
+    try:
+        return str(train_jobtitle.get_analytics())
+    except Exception as e:
+        console.error(e)
+        return e, 500
+
 console.info("Starting server...")
 app.run()

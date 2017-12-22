@@ -16,5 +16,7 @@ e = [_['categories'][0] for _ in test]
 accuracy = utils.evaluate(pipe, t, e)
 console.success("%f accuracy"%accuracy)
 
-# analytics = utils.analyze(pipe, t, e, utils.categories(test))
-# console.log('\n'+str(analytics))
+def get_analytics():
+    analytics = utils.analyze(pipe, t, e, utils.categories(test))
+    # console.log('\n'+str(analytics))
+    return analytics
