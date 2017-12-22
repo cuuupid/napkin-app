@@ -21,11 +21,12 @@ with open('jobs.json') as f:
             job_postings = []
             for link in links:
                 job_title = link.text_content().strip().lstrip()
-                res = requests.post(
-                    'http://127.0.0.1:8000/predict', json={'title': job_title})
-                prediction = res.text.strip().lstrip()
-                if prediction in ['IT/Software Development', 'Engineering']:
-                    job_postings.append(job_title)
+                if 'intern' in job_title: # only test if intern position
+                    res = requests.post(
+                        'http://127.0.0.1:8000/predict', json={'title': job_title})
+                    prediction = res.text.strip().lstrip()
+                    if prediction in ['IT/Software Development', 'Engineering']:
+                        job_postings.append(job_title)
             job_entry['positions'] = job_postings
         except Exception as e:
             console.error(e)
