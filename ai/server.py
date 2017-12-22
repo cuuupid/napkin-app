@@ -4,36 +4,37 @@ pipe = train_jobtitle.pipe
 from console_logging.console import Console
 console = Console()
 
-from flask import Flask, request, jsonify
-app = Flask(__name__)
+from sanic import Sanic
+from sanic.response import json, text
+app = Sanic(__name__)
 
 @app.route('/')
-def hello():
-    return '', 200
+async def hello(request):
+    return text('', status=200)
 
 @app.route('/predict', methods=['POST'])
-def predict():
+async def predict(request):
     try:
-        return str(pipe.predict([request.get_json(force=True)['title']])[0])
+        return text(str(pipe.predict([request.json['title']])[0]))
     except Exception as e:
         console.error(e)
-        return e, 500
+        return text(e, status=500)
 
 @app.route('/predict_many', methods=['POST'])
-def predict_many():
+async def predict_many(request):
     try:
-        return jsonify(list(pipe.predict(request.get_json(force=True)['titles'])))
+        return json(list(pipe.predict(request.json['titles'])))
     except Exception as e:
         console.error(e)
-        return e, 500
+        return text(e, status=500)
 
 @app.route('/log')
-def log():
+async def log(request):
     try:
-        return str(train_jobtitle.get_analytics())
+        return text(str(train_jobtitle.get_analytics()))
     except Exception as e:
         console.error(e)
-        return e, 500
+        return text(e, status=500)
 
 console.info("Starting server...")
 app.run()
